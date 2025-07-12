@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ตะกร้าสินค้า - $hirtUpFarkU</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* หากมี Custom CSS เพิ่มเติมจาก Tailwind ให้ใส่ที่นี่ */
+        body {
+            font-family: 'Anuphan', sans-serif; /* แนะนำให้ใช้ฟอนต์ไทยที่ดูดี */
+            /* เพิ่ม @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600;700&display=swap'); ใน style.css ถ้าใช้ Anuphan */
+        }
+
+        /* Custom styles for cart item */
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #e0e0e0; /* เส้นประคั่นแต่ละรายการ */
+        }
+        .cart-item-row:last-child {
+            border-bottom: none; /* ไม่มีเส้นประที่รายการสุดท้าย */
+        }
+        .item-name-col {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        .item-qty-col, .item-price-col {
+            min-width: 80px;
+            text-align: right;
+        }
+        .item-price-col {
+            font-weight: 600;
+            color: #4c51bf; /* สีม่วงเข้ม */
+        }
+        .remove-item-btn {
+            margin-left: 15px;
+            background-color: #ef4444; /* red-500 */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.875rem; /* text-sm */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .remove-item-btn:hover {
+            background-color: #dc2626; /* red-600 */
+        }
+
+        .total-summary {
+            border-top: 2px solid #a78bfa; /* เส้นคั่นหนาด้านบนของสรุปยอด */
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+        .total-amount {
+            color: #7b2cbf; /* สีม่วงเข้มขึ้นสำหรับยอดรวม */
+            font-size: 1.5rem; /* text-2xl */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-indigo-100 text-gray-800 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-gradient-to-r from-purple-700 to-indigo-700 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center max-w-4xl">
+            <h1 class="text-3xl font-extrabold tracking-tight">$hirtUpFarkU</h1>
+            <nav class="space-x-4 text-base font-medium">
+                <a href="index.html" class="hover:text-purple-200 transition duration-300">หน้าแรก</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="container mx-auto px-4 py-12 flex-grow max-w-4xl">
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
+            <h2 class="text-3xl font-bold mb-6 text-purple-800 flex items-center">
+                <span class="mr-3">🛒</span> สินค้าในตะกร้าของคุณ
+            </h2>
+            <div id="cart-items-container">
+                <div class="hidden md:flex justify-between items-center text-gray-600 font-semibold mb-3 pb-2 border-b-2 border-gray-200">
+                    <span class="flex-grow">สินค้า</span>
+                    <span class="min-w-[80px] text-right">จำนวน</span>
+                    <span class="min-w-[80px] text-right">ราคา</span>
+                    <span class="min-w-[40px]"></span> </div>
+                <ul id="cart-list" class="space-y-3">
+                    </ul>
+            </div>
+
+            <p id="empty-cart-message" class="text-gray-500 text-center py-8 hidden text-lg">
+                ดูเหมือนตะกร้าของคุณยังว่างเปล่า 😔 <br> ไปเลือกซื้อสินค้าจาก <a href="index.html" class="text-purple-600 hover:underline">หน้าแรก</a> กันเลย!
+            </p>
+
+            <div id="cart-summary" class="hidden">
+                <div class="total-summary">
+                    <span>ยอดรวมทั้งหมด:</span>
+                    <span class="total-amount" id="total-price">฿0.00</span>
+                </div>
+                
+                <div class="mt-8 flex justify-center">
+                    <button onclick="clearCart()"
+                            class="bg-red-600 hover:bg-red-700 text-white px-7 py-3 rounded-lg shadow-lg
+                                   text-lg font-semibold transition duration-300 ease-in-out
+                                   transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+                        <span class="mr-2">🗑️</span> ล้างตะกร้าสินค้า
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="payment-channels" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
+            <h2 class="text-3xl font-bold mb-6 text-purple-800 flex items-center">
+                <span class="mr-3">✅</span> ยืนยันการสั่งซื้อผ่านช่องทางต่อไปนี้
+            </h2>
+            <div class="grid gap-6 md:grid-cols-3">
+                <a href="https://lin.ee/73VgZSx" target="_blank" rel="noopener noreferrer"
+                   class="flex flex-col items-center p-5 rounded-lg shadow-md transition-all duration-300
+                          bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 hover:border-green-400">
+                    <span class="text-4xl mb-2">💬</span>
+                    <h3 class="font-bold text-lg">LINE OA</h3>
+                    <p class="text-sm text-green-700">@shirtupfarku</p>
+                </a>
+
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScbBnQfZ6Hu4o32z6QJ1NDuSBcUxWKA2-rj1jLDmiV6NpSiEw/viewform?usp=sharing&ouid=101592615878171220533"
+                   target="_blank" rel="noopener noreferrer"
+                   class="flex flex-col items-center p-5 rounded-lg shadow-md transition-all duration-300
+                          bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 hover:border-blue-400">
+                    <span class="text-4xl mb-2">📝</span>
+                    <h3 class="font-bold text-lg">Google Form</h3>
+                    <p class="text-sm text-blue-700">กรอกแบบฟอร์มออนไลน์</p>
+                </a>
+
+                <a href="https://www.instagram.com/shirt_up.ac" target="_blank" rel="noopener noreferrer"
+                   class="flex flex-col items-center p-5 rounded-lg shadow-md transition-all duration-300
+                          bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 hover:border-pink-400">
+                    <span class="text-4xl mb-2">📷</span>
+                    <h3 class="font-bold text-lg">Instagram DM</h3>
+                    <p class="text-sm text-pink-700">@shirt_up.ac</p>
+                </a>
+            </div>
+        </div>
+
+        <p id="instruction-note" class="mt-8 text-base text-gray-700 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm hidden">
+            📌 <strong>หมายเหตุ:</strong> เพื่อยืนยันการสั่งซื้อ กรุณาคัดลอกรายการสินค้าจากด้านบนแล้วส่งข้อความหรือกรอกแบบฟอร์มผ่านช่องทางที่คุณสะดวก
+        </p>
+
+    </section>
+
+    <footer class="bg-gray-200 text-center py-5 text-sm text-gray-600 mt-auto shadow-inner">
+        © 2025 $hirtUpFarkU. All rights reserved. | <a href="#" class="hover:underline">นโยบายความเป็นส่วนตัว</a>
+    </footer>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartList = document.getElementById("cart-list");
+        const emptyCartMessage = document.getElementById("empty-cart-message");
+        const cartSummary = document.getElementById("cart-summary");
+        const totalPriceElement = document.getElementById("total-price");
+        const paymentChannels = document.getElementById("payment-channels");
+        const instructionNote = document.getElementById("instruction-note");
+        let totalAmount = 0;
+
+        function renderCart() {
+            cartList.innerHTML = '';
+            totalAmount = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove("hidden");
+                cartSummary.classList.add("hidden");
+                paymentChannels.classList.add("hidden");
+                instructionNote.classList.add("hidden");
+                document.getElementById("cart-items-container").classList.add("hidden");
+            } else {
+                emptyCartMessage.classList.add("hidden");
+                cartSummary.classList.remove("hidden");
+                paymentChannels.classList.remove("hidden");
+                instructionNote.classList.remove("hidden");
+                document.getElementById("cart-items-container").classList.remove("hidden");
+
+                cart.forEach((item, index) => {
+                    const li = document.createElement("li");
+                    li.className = "cart-item-row";
+
+                    const itemName = document.createElement("span");
+                    itemName.className = "item-name-col";
+                    // ตรวจสอบให้แน่ใจว่า item.name มีอยู่ ถ้าไม่ ก็จะ fallback ไปใช้ item ทั้งหมด
+                    itemName.textContent = item.name || "ชื่อสินค้าไม่พบ"; 
+
+                    const itemQty = document.createElement("span");
+                    itemQty.className = "item-qty-col";
+                    // ใช้ item.quantity ถ้ามี ไม่งั้นใช้ 1 เป็นค่าเริ่มต้น
+                    itemQty.textContent = `${item.quantity || 1} ชิ้น`;
+
+                    const itemPrice = document.createElement("span");
+                    itemPrice.className = "item-price-col";
+                    
+                    // ดึงราคาและจำนวนอย่างปลอดภัย
+                    const price = typeof item.price === 'number' ? item.price : 0;
+                    const quantity = typeof item.quantity === 'number' ? item.quantity : 1;
+
+                    itemPrice.textContent = `฿${(price * quantity).toFixed(2)}`;
+
+                    const removeButton = document.createElement("button");
+                    removeButton.className = "remove-item-btn";
+                    removeButton.textContent = "ลบ";
+                    removeButton.onclick = () => removeItem(index);
+
+                    totalAmount += price * quantity;
+
+                    li.appendChild(itemName);
+                    li.appendChild(itemQty);
+                    li.appendChild(itemPrice);
+                    li.appendChild(removeButton);
+                    cartList.appendChild(li);
+                });
+
+                totalPriceElement.textContent = `฿${totalAmount.toFixed(2)}`;
+            }
+        }
+
+        function removeItem(indexToRemove) {
+            cart.splice(indexToRemove, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCart();
+        }
+
+        function clearCart() {
+            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการล้างตะกร้าสินค้าทั้งหมด?")) {
+                localStorage.removeItem("cart");
+                cart = [];
+                renderCart();
+            }
+        }
+
+        // เรียกใช้งานเมื่อโหลดหน้าครั้งแรก
+        renderCart();
+    </script>
+</body>
+</html>

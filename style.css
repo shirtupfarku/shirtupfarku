@@ -1,0 +1,180 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background-color: #fefefe;
+  color: #333;
+}
+
+header {
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+nav {
+  margin-top: 10px;
+}
+nav a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+.hero {
+  background: #ffcc00;
+  padding: 40px;
+  text-align: center;
+}
+.hero .btn {
+  background: #000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px 10px;
+  flex-wrap: wrap;
+}
+.feature {
+  width: 30%;
+  min-width: 200px;
+  margin-bottom: 20px;
+}
+
+.bestsellers {
+  text-align: center;
+  padding: 40px;
+}
+.product-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.product-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.product-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+button {
+  background-color: #ffcc00;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #e6b800;
+}
+
+.review blockquote {
+  font-style: italic;
+  margin: 10px 20px;
+  text-align: center;
+}
+
+footer {
+  background-color: #111;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+footer .social {
+  margin-top: 10px;
+}
+footer .social a {
+  color: #ffcc00;
+  margin: 0 10px;
+  text-decoration: none;
+}
+.add-to-cart-button {
+    background-color: #7B68EE; /* สีม่วงตามรูป (ปรับได้ตามต้องการ) */
+    color: white; /* สีข้อความปุ่ม */
+    padding: 12px 25px; /* ขนาดของปุ่ม (ความสูงและความกว้าง) */
+    border: none; /* ไม่มีเส้นขอบ */
+    border-radius: 8px; /* ความโค้งมนของมุมปุ่ม */
+    font-size: 18px; /* ขนาดตัวอักษร */
+    font-weight: bold; /* ตัวหนา */
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปมือเมื่อชี้ */
+    transition: background-color 0.3s ease; /* เพิ่ม transition เมื่อโฮเวอร์ */
+    width: 100%; /* ทำให้ปุ่มกว้างเต็มพื้นที่ของ parent (ถ้าต้องการ) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ปุ่มดูมีมิติ */
+}
+
+.add-to-cart-button:hover {
+    background-color: #6A5ACD; /* สีม่วงที่เข้มขึ้นเมื่อเมาส์ชี้ (hover) */
+}
+
+/* เพิ่ม CSS สำหรับองค์ประกอบอื่น ๆ ใน Card เพื่อให้คล้ายกับรูปภาพของคุณ */
+.product-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    width: 300px; /* หรือปรับตามความเหมาะสม */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 20px;
+    color: #E74C3C; /* หรือสีแดงที่คุณใช้ */
+    margin-bottom: 20px;
+}
+
+.product-old-price {
+    font-size: 16px;
+    color: #888;
+    text-decoration: line-through;
+    margin-left: 10px;
+}
+
+.product-tags {
+    margin-bottom: 15px;
+}
+
+.product-tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.tag-yellow {
+    background-color: #FFD700;
+    color: #333;
+}
+
+.tag-blue {
+    background-color: #ADD8E6;
+    color: #333;
+}
