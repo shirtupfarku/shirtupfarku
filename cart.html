@@ -111,7 +111,7 @@
                         🗑️ ล้างตะกร้าสินค้า
                     </button>
 
-                                        <!-- ปุ่มแจ้งชำระเงิน -->
+                    <!-- ปุ่มแจ้งชำระเงิน -->
                     <button
                         onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform', '_blank')"
                         class="bg-purple-700 hover:bg-purple-900 text-white font-semibold py-3 px-8 rounded-lg shadow-lg justify-start
@@ -120,7 +120,9 @@
                         📤 แจ้งชำระเงินและแนบสลิป
                     </button>
                 </div>
-            </div>
+            </div> 
+
+            
 
 
         <div id="payment-channels" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
@@ -251,6 +253,129 @@
 
         // เรียกใช้งานเมื่อโหลดหน้าครั้งแรก
         renderCart();
+        function submitCart() {
+            if (cart.length === 0) {
+                window.open("https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform", "_blank");
+                return;
+            }
+
+            const webhookURL = "https://script.google.com/macros/s/AKfycbxGQ3ZI8RC_bF3r5j4E4Uz4BzHOCJNI3XMh488jVKkPT2s8r-vUmXW_OePvAx9iXE6bAA/exec"; // 🔁 เปลี่ยนเป็นของคุณ
+            const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform";
+
+            const name = localStorage.getItem("username") || "ไม่ระบุชื่อ";
+
+            const payload = {
+                cart: cart,
+                name: name
+            };
+
+            fetch(webhookURL, {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).finally(() => {
+                clearCart();
+                window.open(googleFormURL, '_blank');
+
+                fetch(webhookURL, {
+
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: { "Content-Type": "application/json" }
+                })
+                .then(res => res.text())
+                .then(data => console.log("ส่งข้อมูลสำเร็จ:", data))
+                .catch(err => console.error("ส่งข้อมูลล้มเหลว:", err));
+
+            });
+        }   
+
+        function changeQuantity(index, delta) {
+    if (cart[index]) {
+        let newQty = (cart[index].quantity || 1) + delta;
+        if (newQty < 1) newQty = 1; // ไม่ให้ต่ำกว่า 1
+        cart[index].quantity = newQty;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+    }
+}
+
+        // ฟังก์ชัน renderCart ตัวใหม่ที่มีปุ่ม + -
+        function renderCart() {
+            cartList.innerHTML = '';
+            totalAmount = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove("hidden");
+                cartSummary.classList.add("hidden");
+                paymentChannels.classList.add("hidden");
+                instructionNote.classList.add("hidden");
+                document.getElementById("cart-items-container").classList.add("hidden");
+            } else {
+                emptyCartMessage.classList.add("hidden");
+                cartSummary.classList.remove("hidden");
+                paymentChannels.classList.remove("hidden");
+                instructionNote.classList.remove("hidden");
+                document.getElementById("cart-items-container").classList.remove("hidden");
+
+                cart.forEach((item, index) => {
+                    const li = document.createElement("li");
+                    li.className = "cart-item-row";
+
+                    const itemName = document.createElement("span");
+                    itemName.className = "item-name-col";
+                    itemName.textContent = item.name || "ชื่อสินค้าไม่พบ";
+
+                    const itemQty = document.createElement("span");
+                    itemQty.className = "item-qty-col flex items-center justify-end space-x-2";
+
+                    const btnMinus = document.createElement("button");
+                    btnMinus.className = "qty-btn";
+                    btnMinus.textContent = "-";
+                    btnMinus.onclick = () => changeQuantity(index, -1);
+
+                    const qtyText = document.createElement("span");
+                    qtyText.className = "qty-text";
+                    qtyText.textContent = item.quantity || 1;
+
+                    const btnPlus = document.createElement("button");
+                    btnPlus.className = "qty-btn";
+                    btnPlus.textContent = "+";
+                    btnPlus.onclick = () => changeQuantity(index, 1);
+
+                    itemQty.appendChild(btnMinus);
+                    itemQty.appendChild(qtyText);
+                    itemQty.appendChild(btnPlus);
+
+                    const itemPrice = document.createElement("span");
+                    itemPrice.className = "item-price-col";
+                    const price = typeof item.price === 'number' ? item.price : 0;
+                    const quantity = typeof item.quantity === 'number' ? item.quantity : 1;
+                    itemPrice.textContent = `฿${(price * quantity).toFixed(2)}`;
+
+                    const removeButton = document.createElement("button");
+                    removeButton.className = "remove-item-btn";
+                    removeButton.textContent = "ลบ";
+                    removeButton.onclick = () => removeItem(index);
+
+                    totalAmount += price * quantity;
+
+                    li.appendChild(itemName);
+                    li.appendChild(itemQty);
+                    li.appendChild(itemPrice);
+                    li.appendChild(removeButton);
+                    cartList.appendChild(li);
+                });
+
+                totalPriceElement.textContent = `฿${totalAmount.toFixed(2)}`;
+            }
+        }
+
+        // เรียกใช้งาน renderCart ที่ฟังก์ชันตัวใหม่ตอนโหลดหน้า
+        renderCart();
+
     </script>
 </body>
 </html>
