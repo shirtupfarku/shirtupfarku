@@ -75,7 +75,7 @@
             </nav>
         </div>
     </header>
-
+        
     <section class="container mx-auto px-4 py-12 flex-grow max-w-4xl">
         <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
             <h2 class="text-3xl font-bold mb-6 text-purple-800 flex items-center">
@@ -111,6 +111,25 @@
                 </div>
             </div>
         </div>
+
+        <section class="container mx-auto px-4 pb-16 max-w-4xl">
+    <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mt-10">
+        <h2 class="text-2xl font-bold text-purple-800 mb-4 flex items-center">
+            <span class="mr-2">📤</span> แจ้งการชำระเงินและแนบสลิป
+        </h2>
+
+                <p class="text-gray-600 mb-4">
+            โปรดกรอกชื่อผู้สั่งซื้อและแนบสลิปโอนเงินเพื่อให้ทีมงานตรวจสอบและยืนยันคำสั่งซื้อของคุณ
+        </p>
+            <button
+            onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform', '_blank')"
+            class="bg-purple-700 hover:bg-purple-900 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300"
+            type="button"
+            >
+            แจ้งชำระเงินและแนบสลิป
+            </button>
+    </div>
+        </section>
 
         <div id="payment-channels" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
             <h2 class="text-3xl font-bold mb-6 text-purple-800 flex items-center">
@@ -149,7 +168,7 @@
         </p>
 
     </section>
-
+    
     <footer class="bg-gray-200 text-center py-5 text-sm text-gray-600 mt-auto shadow-inner">
         © 2025 $hirtUpFarkU. All rights reserved. | <a href="#" class="hover:underline">นโยบายความเป็นส่วนตัว</a>
     </footer>
@@ -238,6 +257,8 @@
 
         // เรียกใช้งานเมื่อโหลดหน้าครั้งแรก
         renderCart();
+
+                  
     </script>
 </body>
 </html>
