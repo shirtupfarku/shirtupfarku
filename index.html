@@ -19,11 +19,31 @@
     .product-item { position: relative; }
     .product-name { font-size: 1.25rem; font-weight: bold; }
     .product-price { font-weight: bold; color: #d53f8c; }
+
+    /* Style สำหรับ Notification */
+    .notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Green */
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        font-weight: bold;
+        text-align: center;
+    }
+    .notification.show {
+        opacity: 1;
+    }
   </style>
 </head>
     <body class="font-kanit bg-gray-100">
-        <!-- Hero Header ใหม่ -->
-    <section id="home" class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-24">
+        <section id="home" class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-24">
     <div class="max-w-4xl mx-auto text-center px-4">
         <h1 class="text-5xl md:text-7xl font-bungee mb-4 animate-bounce">
         $hirtUpFarkU
@@ -37,33 +57,12 @@
         </a>
         <a href="#contact" class="border-2 border-white text-white font-bold py-3 px-6 rounded-full text-lg hover:bg-white hover:text-purple-600 transition">
             ติดต่อเรา
-            
-            <script>
-
-              
-  // Smooth scroll สำหรับลิงก์ภายในหน้า
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const targetId = this.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-
-      if (targetElement) {
-        e.preventDefault();
-        targetElement.scrollIntoView({
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-</script>
-
         </a>
         </div>
     </div>
     </section>
 
 
-  <!-- เมนูนำทาง -->
   <nav class="bg-gradient-to-r from-purple-600 to-pink-500 shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex justify-between items-center h-16">
@@ -92,27 +91,9 @@
         <a href="#about" class="block text-white hover:bg-purple-800 px-3 py-2 rounded-md text-base font-medium">เกี่ยวกับเรา</a>
         <a href="#contact" class="block text-white hover:bg-purple-800 px-3 py-2 rounded-md text-base font-medium">ติดต่อ</a>
         <a href="cart.html" class="block text-white hover:bg-purple-800 px-3 py-2 rounded-md text-base font-medium">🛒 ตะกร้า (<span id="cart-count-mobile">0</span>)</a>
-      <script>
-  // Smooth scroll สำหรับลิงก์ภายในหน้า
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const targetId = this.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-
-      if (targetElement) {
-        e.preventDefault();
-        targetElement.scrollIntoView({
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-</script>
-
     </div>
     </div>
   </nav>
-  <!-- โซนสินค้า -->
   <section id="products" class="py-16 px-4 bg-white">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-12">
@@ -120,24 +101,20 @@
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">เสื้อสวยๆ ที่คัดสรรมาเพื่อคุณโดยเฉพาะ!</p>
       </div>
 
-    <!-- ✅ กล่องสินค้า + ปุ่มเลื่อน -->
-      <div class="relative max-w-screen-xl mx-auto mt-10">
+    <div class="relative max-w-screen-xl mx-auto mt-10">
 
-      <!-- 🔽 ปุ่มเลื่อนซ้าย -->
-        <button onclick="scrollLeft()" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow hover:bg-white transition">
+      <button onclick="scrollLeft()" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow hover:bg-white transition">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         
 
-        <!-- 🔁 กล่องสินค้าที่เลื่อนแนวนอนได้ -->
-      <div id="yued-scroll" class="overflow-x-auto scroll-smooth px-6">
+        <div id="yued-scroll" class="overflow-x-auto scroll-smooth px-6">
         <div class="flex space-x-6 py-6 w-max snap-x">
     
 
-        <!-- สินค้า 1 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-1">
           <img src="https://i.postimg.cc/rFvTdwrP/1.jpg" alt="เสื้อยืดลายนกอินทรี (สีดำ)" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อยืดลายนกอินทรี (สีดำ)</h3>
@@ -149,8 +126,7 @@
           </div>
         </div>
 
-        <!-- สินค้า 2 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-2">
           <img src="https://i.postimg.cc/hvXFjkPn/2.jpg" alt="เสื้อยืดลายนกอินทรี (สีขาว)" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อยืดลายนกอินทรี (สีขาว)</h3>
@@ -162,8 +138,7 @@
           </div>
         </div>
 
-        <!-- สินค้า 3 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-3">
           <img src="https://i.postimg.cc/3RS538h9/3.jpg" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -175,8 +150,7 @@
           </div>
         </div>
 
-        <!-- สินค้า 4 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-4">
           <img src="https://i.postimg.cc/nzcf8syC/4.jpg" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -188,8 +162,7 @@
           </div>
         </div>
 
-        <!-- สินค้า 5 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-5">
           <img src="https://i.postimg.cc/ZqLzDPDG/5.jpg" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -201,8 +174,7 @@
           </div>
         </div>
 
-        <!-- สินค้า 6 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-6">
           <img src="https://i.postimg.cc/HnRq76Vy/6.jpg" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -213,8 +185,7 @@
             </button>
           </div>
         </div>
-        <!-- สินค้า 7 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-7">
           <img src="https://placehold.co/600x600" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -226,8 +197,7 @@
           </div>
         </div>
 
-        <!-- สินค้า 8 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-8">
           <img src="https://placehold.co/600x600" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -238,8 +208,7 @@
             </button>
           </div>
         </div>
-        <!-- สินค้า 9 -->
-        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg ">
+        <div class="product-card product-item bg-gray-50 rounded-xl shadow-lg" data-product-id="item-9">
           <img src="https://placehold.co/600x600" alt="เสื้อคอกลม Basic" class="block mx-auto w-full h-80 object-cover">
           <div class="p-5">
             <h3 class="product-name text-xl font-bold mb-2 text-gray-800">เสื้อคอกลม Basic</h3>
@@ -252,7 +221,6 @@
         </div>
         
 
-          <!-- 🔽 ปุ่มเลื่อนขวา -->
           <button onclick="scrollRight()" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-md hover:bg-white transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -260,7 +228,6 @@
           </button>
 
         </div>
-          <!-- ✅ สคริปต์ควบคุมการเลื่อน -->
           <script>
             function scrollLeft() {
               document.getElementById('yued-scroll').scrollBy({ left: -300, behavior: 'smooth' });
@@ -335,27 +302,22 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div>
-                    <form class="space-y-6">
+                    <form action="https://docs.google.com/forms/d/e/1FAIpQLSdroD-t55WzC_xg21dTyxIPqmVVVUGQYy1SQDnAfg_quPWVZA/viewform" method="POST" target="_blank" class="space-y-6">
                         <div>
-                        <form action="https://docs.google.com/forms/d/e/1FAIpQLSdroD-t55WzC_xg21dTyxIPqmVVVUGQYy1SQDnAfg_quPWVZA/viewform" method="POST" target="_blank">
                             <label for="name" class="block text-lg font-bold text-gray-700 mb-2">ชื่อของคุณ</label>
                             <input type="text" name="entry.1234567890" id="name" required
                                 class="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
-                    </form>
-
                         <div>
                             <label for="email" class="block text-lg font-bold text-gray-700 mb-2">อีเมล</label>
-                             <input type="text" name="entry.0987654321" id="name" required
+                             <input type="email" name="entry.0987654321" id="email" required
                                 class="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:border-purple-500 focus:outline-none">
                         </div>
-
                         <div>
                             <label for="message" class="block text-lg font-bold text-gray-700 mb-2">ข้อความ</label>
-                            <input type="text" name="entry.1122334455" id="name" required
+                            <textarea name="entry.1122334455" id="message" rows="5" required
                                 class="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
                         </div>
-                        <form action="https://docs.google.com/forms/d/e/1FAIpQLSdroD-t55WzC_xg21dTyxIPqmVVVUGQYy1SQDnAfg_quPWVZA/viewform" method="POST" target="_blank"></form>                               
                         <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition duration-300">
                             ส่งข้อความ
                         </button>
@@ -364,19 +326,9 @@
 
                 <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-xl shadow-md">
                     <h3 class="text-2xl font-bold text-purple-600 mb-6">ข้อมูลติดต่อ</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                       
-                            </div>
-                            <div>
-                                <h4 class=></h4>                                
-                            </div>
-                        </div>
-                        <div class="space-y-6">
-                          <!-- LINE OA -->
+                    <div class="space-y-6">
                         <div class="flex items-start">
                             <div class="bg-green-100 p-3 rounded-full mr-4">
-                                <!-- ไอคอน LINE (Chat bubble) -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -388,10 +340,8 @@
                                 </p>
                             </div>
                         </div>
-                        <!-- Instagram -->
                         <div class="flex items-start">
                             <div class="bg-pink-100 p-3 rounded-full mr-4">
-                                <!-- ไอคอน Instagram (Camera style) -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <circle cx="12" cy="12" r="3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -405,10 +355,8 @@
                                 </p>
                             </div>
                         </div>
-                        <!-- Google Form -->
                         <div class="flex items-start">
                             <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                <!-- ไอคอน Google Form (Document with checkmark) -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path d="M9 12l2 2 4-4M4 4h16v16H4z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -511,7 +459,6 @@
                     </ul>
                 </div>
             </div>
-  <!-- Footer -->
   <footer class="bg-purple-900 text-white pt-12 pb-6 px-4 mt-12">
     <div class="max-w-7xl mx-auto text-center">
       <h3 class="font-bungee text-2xl mb-4">$hirtUpFarkU</h3>
@@ -520,11 +467,58 @@
     </div>
   </footer>
 
-  <!-- Script ระบบตะกร้า -->
   <script>
+    // Smooth scroll สำหรับลิงก์ภายในหน้า
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // ฟังก์ชันแสดง Notification (Toast)
+    function showNotification(message) {
+        const notificationDiv = document.createElement('div');
+        notificationDiv.className = 'notification';
+        notificationDiv.textContent = message;
+        document.body.appendChild(notificationDiv);
+
+        // แสดง Notification
+        setTimeout(() => {
+            notificationDiv.classList.add('show');
+        }, 10); // หน่วงเวลาเล็กน้อยเพื่อให้ CSS transition ทำงาน
+
+        // ซ่อนและลบ Notification หลังจาก 3 วินาที
+        setTimeout(() => {
+            notificationDiv.classList.remove('show');
+            notificationDiv.addEventListener('transitionend', () => {
+                notificationDiv.remove();
+            }, { once: true });
+        }, 3000); // แสดง 3 วินาที
+    }
+
+
     // ฟังก์ชันเพิ่มสินค้าลงในตะกร้า
     function addToCart(buttonElement) {
       const productItem = buttonElement.closest('.product-item');
+      // **แก้ไขตรงนี้:** ดึง data-product-id
+      const productId = productItem.dataset.productId; 
+
+      // ตรวจสอบว่า productId มีค่าหรือไม่
+      if (!productId) {
+        // เปลี่ยน alert เป็น showNotification
+        showNotification("เกิดข้อผิดพลาด: ไม่พบ ID ของสินค้า. โปรดตรวจสอบ HTML");
+        console.error("Product ID is undefined for element:", productItem);
+        return;
+      }
+
       const productName = productItem.querySelector('.product-name').textContent;
       const productPriceElement = productItem.querySelector('.product-price');
       const productQuantityInput = productItem.querySelector('.product-quantity');
@@ -535,7 +529,8 @@
       if (productPriceElement && productPriceElement.dataset.price) {
         productPrice = parseFloat(productPriceElement.dataset.price);
       } else {
-        alert("เกิดข้อผิดพลาด: ไม่พบข้อมูลราคาของสินค้า");
+        // เปลี่ยน alert เป็น showNotification
+        showNotification("เกิดข้อผิดพลาด: ไม่พบข้อมูลราคาของสินค้า");
         return;
       }
 
@@ -544,18 +539,21 @@
       }
 
       if (isNaN(productPrice) || isNaN(productQuantity) || productQuantity <= 0) {
-        alert("ข้อมูลสินค้าไม่ถูกต้อง");
+        // เปลี่ยน alert เป็น showNotification
+        showNotification("ข้อมูลสินค้าไม่ถูกต้อง");
         return;
       }
 
       const itemToAdd = {
+        id: productId, // **ส่ง ID ไปด้วย**
         name: productName,
         price: productPrice,
         quantity: productQuantity
       };
 
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existingIndex = cart.findIndex(item => item.name === productName);
+      // **แก้ไขตรงนี้:** ค้นหาด้วย ID แทนชื่อ
+      const existingIndex = cart.findIndex(item => item.id === productId); 
 
       if (existingIndex !== -1) {
         cart[existingIndex].quantity += productQuantity;
@@ -565,7 +563,8 @@
 
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCartCount();
-      
+      // **เปลี่ยนจาก alert เป็น showNotification**
+      showNotification(`${productName} ถูกเพิ่มลงในตะกร้าแล้ว!`);
     }
 
     // ฟังก์ชันอัปเดตจำนวนสินค้าที่แสดงในตะกร้า
@@ -585,7 +584,7 @@
     }
 
     // เรียกเมื่อโหลดหน้าเสร็จ
-    updateCartCount();
+    document.addEventListener('DOMContentLoaded', updateCartCount);
 
     // Mobile menu toggle
     const mobileMenuButton = document.querySelector(".mobile-menu-button");
