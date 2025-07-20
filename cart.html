@@ -2,26 +2,23 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ตะกร้าสินค้า - $hirtUpFarkU</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* หากมี Custom CSS เพิ่มเติมจาก Tailwind ให้ใส่ที่นี่ */
+        @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Anuphan', sans-serif; /* แนะนำให้ใช้ฟอนต์ไทยที่ดูดี */
-            /* เพิ่ม @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600;700&display=swap'); ใน style.css ถ้าใช้ Anuphan */
+            font-family: 'Anuphan', sans-serif;
         }
-
-        /* Custom styles for cart item */
         .cart-item-row {
             display: flex;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px dashed #e0e0e0; /* เส้นประคั่นแต่ละรายการ */
+            border-bottom: 1px dashed #e0e0e0;
         }
         .cart-item-row:last-child {
-            border-bottom: none; /* ไม่มีเส้นประที่รายการสุดท้าย */
+            border-bottom: none;
         }
         .item-name-col {
             flex-grow: 1;
@@ -33,108 +30,162 @@
         }
         .item-price-col {
             font-weight: 600;
-            color: #4c51bf; /* สีม่วงเข้ม */
+            color: #4c51bf;
         }
         .remove-item-btn {
             margin-left: 15px;
-            background-color: #ef4444; /* red-500 */
+            background-color: #ef4444;
             color: white;
             border: none;
             border-radius: 4px;
             padding: 4px 8px;
-            font-size: 0.875rem; /* text-sm */
+            font-size: 0.875rem;
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
         .remove-item-btn:hover {
-            background-color: #dc2626; /* red-600 */
+            background-color: #dc2626;
         }
-
         .total-summary {
-            border-top: 2px solid #a78bfa; /* เส้นคั่นหนาด้านบนของสรุปยอด */
+            border-top: 2px solid #a78bfa;
             padding-top: 15px;
             margin-top: 15px;
-            font-size: 1.25rem; /* text-xl */
+            font-size: 1.25rem;
             font-weight: 700;
             display: flex;
             justify-content: space-between;
         }
         .total-amount {
-            color: #7b2cbf; /* สีม่วงเข้มขึ้นสำหรับยอดรวม */
-            font-size: 1.5rem; /* text-2xl */
+            color: #7b2cbf;
+            font-size: 1.5rem;
+        }
+        .qty-btn {
+            background-color: #7c3aed;
+            color: white;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+        .qty-btn:hover {
+            background-color: #5b21b6;
+        }
+        .qty-text {
+            min-width: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Modal styles */
+        #paymentFormModal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: none; /* ซ่อนไว้ในตอนแรก */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        #paymentFormModal.show {
+            display: flex; /* แสดงเมื่อมี class 'show' */
+        }
+        /* เพิ่ม opacity transition เพื่อให้ Modal ดู smooth ขึ้น */
+        #paymentFormModal > div {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        #paymentFormModal.show > div {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Style สำหรับ Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            font-weight: bold;
+            text-align: center;
+        }
+        .notification.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-purple-50 to-indigo-100 text-gray-800 font-sans min-h-screen flex flex-col">
 
-    <header class="bg-gradient-to-r from-purple-700 to-indigo-700 text-white p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center max-w-4xl">
-            <h1 class="text-3xl font-extrabold tracking-tight">$hirtUpFarkU</h1>
-            <nav class="space-x-4 text-base font-medium">
-                <a href="index.html" class="hover:text-purple-200 transition duration-300">หน้าแรก</a>
-            </nav>
-        </div>
-    </header>
+<header class="bg-gradient-to-r from-purple-700 to-indigo-700 text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center max-w-4xl">
+        <h1 class="text-3xl font-extrabold tracking-tight">$hirtUpFarkU</h1>
+        <nav class="space-x-4 text-base font-medium">
+            <a href="index.html" class="hover:text-purple-200 transition duration-300">หน้าแรก</a>
+        </nav>
+    </div>
+</header>
 
-    <section class="container mx-auto px-4 py-12 flex-grow max-w-4xl">
-        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
-            <h2 class="text-3xl font-bold mb-6 text-purple-800 flex items-center">
-                <span class="mr-3">🛒</span> สินค้าในตะกร้าของคุณ
-            </h2>
-            <div id="cart-items-container">
-                <div class="hidden md:flex justify-between items-center text-gray-600 font-semibold mb-3 pb-2 border-b-2 border-gray-200">
-                    <span class="flex-grow">สินค้า</span>
-                    <span class="min-w-[80px] text-right">จำนวน</span>
-                    <span class="min-w-[80px] text-right">ราคา</span>
-                    <span class="min-w-[40px]"></span> </div>
-                <ul id="cart-list" class="space-y-3">
-                    </ul>
+<section class="container mx-auto px-4 py-12 flex-grow max-w-4xl">
+    <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
+        <h2 class="text-3xl font-bold mb-6 text-purple-800 flex items-center">
+            <span class="mr-3">🛒</span> สินค้าในตะกร้าของคุณ
+        </h2>
+        <div id="cart-items-container">
+            <div class="hidden md:flex justify-between items-center text-gray-600 font-semibold mb-3 pb-2 border-b-2 border-gray-200">
+                <span class="flex-grow">สินค้า</span>
+                <span class="min-w-[80px] text-right">จำนวน</span>
+                <span class="min-w-[80px] text-right">ราคา</span>
+                <span class="min-w-[40px]"></span>
+            </div>
+            <ul id="cart-list" class="space-y-3"></ul>
+        </div>
+
+        <p id="empty-cart-message" class="text-gray-500 text-center py-8 hidden text-lg">
+            ดูเหมือนตะกร้าของคุณยังว่างเปล่า 😔 <br> ไปเลือกซื้อสินค้าจาก <a href="index.html" class="text-purple-600 hover:underline">หน้าแรก</a> กันเลย!
+        </p>
+
+        <div id="cart-summary" class="hidden">
+            <div class="total-summary">
+                <span>ยอดรวมทั้งหมด:</span>
+                <span class="total-amount" id="total-price">฿0.00</span>
             </div>
 
-            <p id="empty-cart-message" class="text-gray-500 text-center py-8 hidden text-lg">
-                ดูเหมือนตะกร้าของคุณยังว่างเปล่า 😔 <br> ไปเลือกซื้อสินค้าจาก <a href="index.html" class="text-purple-600 hover:underline">หน้าแรก</a> กันเลย!
-            </p>
+            <div class="flex flex-wrap justify-between items-center gap-4 mt-6">
+                <button onclick="clearCart()"
+                    class="bg-red-600 hover:bg-red-700 text-white px-7 py-3 rounded-lg shadow-lg
+                    text-lg font-semibold transition duration-300 ease-in-out
+                    transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+                    🗑️ ล้างตะกร้าสินค้า
+                </button>
 
-            <div id="cart-summary" class="hidden">
-                <div class="total-summary">
-                    <span>ยอดรวมทั้งหมด:</span>
-                    <span class="total-amount" id="total-price">฿0.00</span>
-                </div>
-                
-                <!-- ปุ่มล้างตะกร้า & แจ้งชำระเงิน (ซ้าย-ขวา) -->
-                <div class="flex flex-wrap justify-between items-center gap-4">
-                    <!-- ปุ่มล้างตะกร้าสินค้า -->
-                    <button onclick="clearCart()"
-                        class="bg-red-600 hover:bg-red-700 text-white px-7 py-3 rounded-lg shadow-lg
-                            text-lg font-semibold transition duration-300 ease-in-out
-                            transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
-                        🗑️ ล้างตะกร้าสินค้า
-                    </button>
-
-                    <!-- ปุ่มแจ้งชำระเงิน -->
-                    <button
-                        onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform', '_blank')"
-                        class="bg-purple-700 hover:bg-purple-900 text-white font-semibold py-3 px-8 rounded-lg shadow-lg justify-start
-                            transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 "
-                        type="button">
-                        📤 แจ้งชำระเงินและแนบสลิป
-                    </button>
-                </div>
-            </div> 
-
-            
-
+                <button id="openPaymentFormBtn"
+                    class="bg-purple-700 hover:bg-purple-900 text-white font-semibold py-3 px-8 rounded-lg shadow-lg justify-start
+                    transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 "
+                    type="button">
+                    📤 แจ้งชำระเงินและแนบสลิป
+                </button>
+            </div>
+        </div>
 
         <div id="payment-channels" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8">
             <h3 class="text-xl font-bold mb-6 text-purple-800 flex flex-col items-center text-center">
-                <span class="mr-3"></span> 
                 <span>✅หากท่านมีปัญหาในการชำระเงิน</span>
                 <span>ท่านสามารถแคปหน้าจอแล้วส่งผ่านช่องทางนี้เพื่อให้แอดมินตรวจสอบครับ❗</span>
             </h3>
             <div class="grid gap-6 md:grid-cols-3">
                 <a href="https://lin.ee/73VgZSx" target="_blank" rel="noopener noreferrer"
                    class="flex flex-col items-center p-5 rounded-lg shadow-md transition-all duration-300
-                          bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 hover:border-green-400">
+                            bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 hover:border-green-400">
                     <span class="text-4xl mb-2">💬</span>
                     <h3 class="font-bold text-lg">LINE OA</h3>
                     <p class="text-sm text-green-700">@shirtupfarku</p>
@@ -143,7 +194,7 @@
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScbBnQfZ6Hu4o32z6QJ1NDuSBcUxWKA2-rj1jLDmiV6NpSiEw/viewform?usp=sharing&ouid=101592615878171220533"
                    target="_blank" rel="noopener noreferrer"
                    class="flex flex-col items-center p-5 rounded-lg shadow-md transition-all duration-300
-                          bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 hover:border-blue-400">
+                            bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 hover:border-blue-400">
                     <span class="text-4xl mb-2">📝</span>
                     <h3 class="font-bold text-lg">Google Form</h3>
                     <p class="text-sm text-blue-700">กรอกแบบฟอร์มออนไลน์</p>
@@ -151,7 +202,7 @@
 
                 <a href="https://www.instagram.com/shirt_up.ac" target="_blank" rel="noopener noreferrer"
                    class="flex flex-col items-center p-5 rounded-lg shadow-md transition-all duration-300
-                          bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 hover:border-pink-400">
+                            bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 hover:border-pink-400">
                     <span class="text-4xl mb-2">📷</span>
                     <h3 class="font-bold text-lg">Instagram DM</h3>
                     <p class="text-sm text-pink-700">@shirt_up.ac</p>
@@ -163,219 +214,330 @@
             📌 <strong>หมายเหตุ:</strong> เพื่อยืนยันการสั่งซื้อ กรุณาคัดลอกรายการสินค้าจากด้านบนแล้วส่งข้อความหรือกรอกแบบฟอร์มผ่านช่องทางที่คุณสะดวก
         </p>
 
-    </section>
+    </div>
+</section>
 
-    <footer class="bg-gray-200 text-center py-5 text-sm text-gray-600 mt-auto shadow-inner">
-        © 2025 $hirtUpFarkU. All rights reserved. | <a href="#" class="hover:underline">นโยบายความเป็นส่วนตัว</a>
-    </footer>
+<footer class="bg-gray-200 text-center py-5 text-sm text-gray-600 mt-auto shadow-inner">
+    © 2025 $hirtUpFarkU. All rights reserved. | <a href="#" class="hover:underline">นโยบายความเป็นส่วนตัว</a>
+</footer>
 
-    <script>
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const cartList = document.getElementById("cart-list");
-        const emptyCartMessage = document.getElementById("empty-cart-message");
-        const cartSummary = document.getElementById("cart-summary");
-        const totalPriceElement = document.getElementById("total-price");
-        const paymentChannels = document.getElementById("payment-channels");
-        const instructionNote = document.getElementById("instruction-note");
-        let totalAmount = 0;
+<div id="paymentFormModal">
+    <div class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" id="modalBackdrop"></div>
+    <div class="fixed inset-0 flex items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative z-10">
+            <button id="closePaymentFormBtn" class="absolute top-2 right-3 text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none">&times;</button>
+            <h3 class="text-xl font-bold mb-4 text-center text-purple-700">แจ้งชำระเงินและแนบสลิป</h3>
+            <div class="mb-6 flex flex-col items-center">
+                <p class="mb-2 font-semibold text-gray-700">สแกนคิวอาร์โค้ดเพื่อชำระเงิน</p>
+                <img src="https://i.postimg.cc/tgC0gLjT/S-26861571.jpg" alt="PromptPay QR Code" class="w-48 h-48 object-contain rounded-lg shadow-md" />
+                <p class="mt-2 text-sm text-gray-500">PromptPay : 0812345678</p>
+                <p id="locked-total-amount" class="text-xl font-bold text-purple-800 mt-4">ยอดที่ต้องชำระ: ฿0.00</p>
+            </div>
+            <form id="paymentForm" class="space-y-4" enctype="multipart/form-data">
+                <div>
+                    <label for="orderId" class="block text-sm font-medium text-gray-700">รหัสคำสั่งซื้อ (Order ID)</label>
+                    <input type="text" id="orderId" name="orderId" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" readonly />
+                </div>
+                <div>
+                    <label for="customerName" class="block text-sm font-medium text-gray-700">ชื่อผู้ชำระเงิน</label>
+                    <input type="text" id="customerName" name="customerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required />
+                </div>
+                <div>
+                    <label for="paymentSlip" class="block text-sm font-medium text-gray-700">แนบสลิปการชำระเงิน (รูป/ไฟล์ PDF)</label>
+                    <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*,.pdf" class="mt-1 block w-full" required />
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-purple-700 hover:bg-purple-900 text-white font-semibold py-2 px-6 rounded-lg shadow-lg">
+                        ส่งข้อมูลแจ้งชำระเงิน
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-        function renderCart() {
-            cartList.innerHTML = '';
-            totalAmount = 0;
-
-            if (cart.length === 0) {
-                emptyCartMessage.classList.remove("hidden");
-                cartSummary.classList.add("hidden");
-                paymentChannels.classList.add("hidden");
-                instructionNote.classList.add("hidden");
-                document.getElementById("cart-items-container").classList.add("hidden");
-            } else {
-                emptyCartMessage.classList.add("hidden");
-                cartSummary.classList.remove("hidden");
-                paymentChannels.classList.remove("hidden");
-                instructionNote.classList.remove("hidden");
-                document.getElementById("cart-items-container").classList.remove("hidden");
-
-                cart.forEach((item, index) => {
-                    const li = document.createElement("li");
-                    li.className = "cart-item-row";
-
-                    const itemName = document.createElement("span");
-                    itemName.className = "item-name-col";
-                    // ตรวจสอบให้แน่ใจว่า item.name มีอยู่ ถ้าไม่ ก็จะ fallback ไปใช้ item ทั้งหมด
-                    itemName.textContent = item.name || "ชื่อสินค้าไม่พบ"; 
-
-                    const itemQty = document.createElement("span");
-                    itemQty.className = "item-qty-col";
-                    // ใช้ item.quantity ถ้ามี ไม่งั้นใช้ 1 เป็นค่าเริ่มต้น
-                    itemQty.textContent = `${item.quantity || 1} ชิ้น`;
-
-                    const itemPrice = document.createElement("span");
-                    itemPrice.className = "item-price-col";
-                    
-                    // ดึงราคาและจำนวนอย่างปลอดภัย
-                    const price = typeof item.price === 'number' ? item.price : 0;
-                    const quantity = typeof item.quantity === 'number' ? item.quantity : 1;
-
-                    itemPrice.textContent = `฿${(price * quantity).toFixed(2)}`;
-
-                    const removeButton = document.createElement("button");
-                    removeButton.className = "remove-item-btn";
-                    removeButton.textContent = "ลบ";
-                    removeButton.onclick = () => removeItem(index);
-
-                    totalAmount += price * quantity;
-
-                    li.appendChild(itemName);
-                    li.appendChild(itemQty);
-                    li.appendChild(itemPrice);
-                    li.appendChild(removeButton);
-                    cartList.appendChild(li);
-                });
-
-                totalPriceElement.textContent = `฿${totalAmount.toFixed(2)}`;
-            }
+<script>
+    // ฟังก์ชันแสดง Notification (Toast)
+    function showNotification(message, isError = false) {
+        const notificationDiv = document.createElement('div');
+        notificationDiv.className = 'notification';
+        if (isError) {
+            notificationDiv.style.backgroundColor = '#d32f2f'; // สีแดงสำหรับข้อผิดพลาด
+        } else {
+            notificationDiv.style.backgroundColor = '#4CAF50'; // สีเขียวสำหรับสำเร็จ
         }
+        notificationDiv.textContent = message;
+        document.body.appendChild(notificationDiv);
 
-        function removeItem(indexToRemove) {
-            cart.splice(indexToRemove, 1);
-            localStorage.setItem("cart", JSON.stringify(cart));
-            renderCart();
-        }
+        // แสดง Notification
+        setTimeout(() => {
+            notificationDiv.classList.add('show');
+        }, 10); // หน่วงเวลาเล็กน้อยเพื่อให้ CSS transition ทำงาน
 
-        function clearCart() {
-            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการล้างตะกร้าสินค้าทั้งหมด?")) {
-                localStorage.removeItem("cart");
-                cart = [];
-                renderCart();
-            }
-        }
+        // ซ่อนและลบ Notification หลังจาก 3 วินาที
+        setTimeout(() => {
+            notificationDiv.classList.remove('show');
+            notificationDiv.addEventListener('transitionend', () => {
+                notificationDiv.remove();
+            }, { once: true });
+        }, 3000); // แสดง 3 วินาที
+    }
 
-        // เรียกใช้งานเมื่อโหลดหน้าครั้งแรก
-        renderCart();
-        function submitCart() {
-            if (cart.length === 0) {
-                window.open("https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform", "_blank");
-                return;
-            }
+    // ตรวจสอบและกำหนดค่าเริ่มต้นของตะกร้า
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartList = document.getElementById("cart-list");
+    const emptyCartMessage = document.getElementById("empty-cart-message");
+    const cartSummary = document.getElementById("cart-summary");
+    const totalPriceElement = document.getElementById("total-price");
+    const paymentChannels = document.getElementById("payment-channels");
+    const instructionNote = document.getElementById("instruction-note");
+    let totalAmount = 0; // ราคารวมของตะกร้าในหน้า Front-end
 
-            const webhookURL = "https://script.google.com/macros/s/AKfycbxGQ3ZI8RC_bF3r5j4E4Uz4BzHOCJNI3XMh488jVKkPT2s8r-vUmXW_OePvAx9iXE6bAA/exec"; // 🔁 เปลี่ยนเป็นของคุณ
-            const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfLjDZih9e31EogI1XYFF9sYeJHaEHCDA7_s6SB6FBaeYMh9w/viewform";
+    // ฟังก์ชันสำหรับแสดงผลตะกร้าสินค้า
+    function renderCart() {
+        cartList.innerHTML = ''; // ล้างรายการเดิม
+        totalAmount = 0; // รีเซ็ตยอดรวม
 
-            const name = localStorage.getItem("username") || "ไม่ระบุชื่อ";
+        if (cart.length === 0) {
+            emptyCartMessage.classList.remove("hidden");
+            cartSummary.classList.add("hidden");
+            paymentChannels.classList.add("hidden");
+            instructionNote.classList.add("hidden");
+            document.getElementById("cart-items-container").classList.add("hidden");
+        } else {
+            emptyCartMessage.classList.add("hidden");
+            cartSummary.classList.remove("hidden");
+            paymentChannels.classList.remove("hidden");
+            instructionNote.classList.remove("hidden");
+            document.getElementById("cart-items-container").classList.remove("hidden");
 
-            const payload = {
-                cart: cart,
-                name: name
-            };
+            cart.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.className = "cart-item-row";
 
-            fetch(webhookURL, {
-                method: "POST",
-                body: JSON.stringify(payload),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).finally(() => {
-                clearCart();
-                window.open(googleFormURL, '_blank');
+                const itemName = document.createElement("span");
+                itemName.className = "item-name-col";
+                itemName.textContent = item.name || "ชื่อสินค้าไม่พบ";
 
-                fetch(webhookURL, {
+                const itemQty = document.createElement("span");
+                itemQty.className = "item-qty-col flex items-center justify-end space-x-2";
 
-                method: "POST",
-                body: JSON.stringify(payload),
-                headers: { "Content-Type": "application/json" }
-                })
-                .then(res => res.text())
-                .then(data => console.log("ส่งข้อมูลสำเร็จ:", data))
-                .catch(err => console.error("ส่งข้อมูลล้มเหลว:", err));
+                const btnMinus = document.createElement("button");
+                btnMinus.className = "qty-btn";
+                btnMinus.textContent = "-";
+                btnMinus.onclick = () => changeQuantity(index, -1);
 
+                const qtyText = document.createElement("span");
+                qtyText.className = "qty-text";
+                qtyText.textContent = item.quantity || 1;
+
+                const btnPlus = document.createElement("button");
+                btnPlus.className = "qty-btn";
+                btnPlus.textContent = "+";
+                btnPlus.onclick = () => changeQuantity(index, 1);
+
+                itemQty.appendChild(btnMinus);
+                itemQty.appendChild(qtyText);
+                itemQty.appendChild(btnPlus);
+
+                const itemPrice = document.createElement("span");
+                itemPrice.className = "item-price-col";
+                const price = typeof item.price === 'number' ? item.price : 0;
+                const quantity = typeof item.quantity === 'number' ? item.quantity : 1;
+                itemPrice.textContent = `฿${(price * quantity).toFixed(2)}`;
+
+                const removeButton = document.createElement("button");
+                removeButton.className = "remove-item-btn";
+                removeButton.textContent = "ลบ";
+                removeButton.onclick = () => removeItem(index);
+
+                totalAmount += price * quantity; // คำนวณยอดรวมใน Front-end
+
+                li.appendChild(itemName);
+                li.appendChild(itemQty);
+                li.appendChild(itemPrice);
+                li.appendChild(removeButton);
+                cartList.appendChild(li);
             });
-        }   
 
-        function changeQuantity(index, delta) {
-    if (cart[index]) {
-        let newQty = (cart[index].quantity || 1) + delta;
-        if (newQty < 1) newQty = 1; // ไม่ให้ต่ำกว่า 1
-        cart[index].quantity = newQty;
+            totalPriceElement.textContent = `฿${totalAmount.toFixed(2)}`;
+        }
+    }
+
+    // ฟังก์ชันลบสินค้า
+    function removeItem(indexToRemove) {
+        cart.splice(indexToRemove, 1);
         localStorage.setItem("cart", JSON.stringify(cart));
         renderCart();
+        showNotification("สินค้าถูกลบออกจากตะกร้าแล้ว", false);
     }
-}
 
-        // ฟังก์ชัน renderCart ตัวใหม่ที่มีปุ่ม + -
-        function renderCart() {
-            cartList.innerHTML = '';
-            totalAmount = 0;
+    // ฟังก์ชันล้างตะกร้า
+    function clearCart() {
+        if (confirm("คุณแน่ใจหรือไม่ที่ต้องการล้างตะกร้าสินค้าทั้งหมด?")) {
+            localStorage.removeItem("cart");
+            cart = [];
+            renderCart();
+            showNotification("ตะกร้าสินค้าถูกล้างแล้ว", false);
+        }
+    }
 
-            if (cart.length === 0) {
-                emptyCartMessage.classList.remove("hidden");
-                cartSummary.classList.add("hidden");
-                paymentChannels.classList.add("hidden");
-                instructionNote.classList.add("hidden");
-                document.getElementById("cart-items-container").classList.add("hidden");
-            } else {
-                emptyCartMessage.classList.add("hidden");
-                cartSummary.classList.remove("hidden");
-                paymentChannels.classList.remove("hidden");
-                instructionNote.classList.remove("hidden");
-                document.getElementById("cart-items-container").classList.remove("hidden");
-
-                cart.forEach((item, index) => {
-                    const li = document.createElement("li");
-                    li.className = "cart-item-row";
-
-                    const itemName = document.createElement("span");
-                    itemName.className = "item-name-col";
-                    itemName.textContent = item.name || "ชื่อสินค้าไม่พบ";
-
-                    const itemQty = document.createElement("span");
-                    itemQty.className = "item-qty-col flex items-center justify-end space-x-2";
-
-                    const btnMinus = document.createElement("button");
-                    btnMinus.className = "qty-btn";
-                    btnMinus.textContent = "-";
-                    btnMinus.onclick = () => changeQuantity(index, -1);
-
-                    const qtyText = document.createElement("span");
-                    qtyText.className = "qty-text";
-                    qtyText.textContent = item.quantity || 1;
-
-                    const btnPlus = document.createElement("button");
-                    btnPlus.className = "qty-btn";
-                    btnPlus.textContent = "+";
-                    btnPlus.onclick = () => changeQuantity(index, 1);
-
-                    itemQty.appendChild(btnMinus);
-                    itemQty.appendChild(qtyText);
-                    itemQty.appendChild(btnPlus);
-
-                    const itemPrice = document.createElement("span");
-                    itemPrice.className = "item-price-col";
-                    const price = typeof item.price === 'number' ? item.price : 0;
-                    const quantity = typeof item.quantity === 'number' ? item.quantity : 1;
-                    itemPrice.textContent = `฿${(price * quantity).toFixed(2)}`;
-
-                    const removeButton = document.createElement("button");
-                    removeButton.className = "remove-item-btn";
-                    removeButton.textContent = "ลบ";
-                    removeButton.onclick = () => removeItem(index);
-
-                    totalAmount += price * quantity;
-
-                    li.appendChild(itemName);
-                    li.appendChild(itemQty);
-                    li.appendChild(itemPrice);
-                    li.appendChild(removeButton);
-                    cartList.appendChild(li);
-                });
-
-                totalPriceElement.textContent = `฿${totalAmount.toFixed(2)}`;
+    // ฟังก์ชันเปลี่ยนจำนวนสินค้า
+    function changeQuantity(index, delta) {
+        if (cart[index]) {
+            let newQty = (cart[index].quantity || 1) + delta;
+            if (newQty < 1) {
+                newQty = 1; // จำนวนต้องไม่น้อยกว่า 1
+                showNotification("จำนวนสินค้าต้องไม่น้อยกว่า 1", true);
             }
+            cart[index].quantity = newQty;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCart();
+            showNotification("อัปเดตจำนวนสินค้าแล้ว", false);
+        }
+    }
+
+    // Modal แจ้งชำระเงิน (Elements & Handlers)
+    const openPaymentFormBtn = document.getElementById("openPaymentFormBtn");
+    const paymentFormModal = document.getElementById("paymentFormModal");
+    const closePaymentFormBtn = document.getElementById("closePaymentFormBtn");
+    const paymentForm = document.getElementById("paymentForm");
+    const lockedTotalAmountElement = document.getElementById("locked-total-amount"); // Element สำหรับแสดงยอดที่ล็อกไว้
+
+    // เมื่อคลิกปุ่ม "แจ้งชำระเงินและแนบสลิป"
+    openPaymentFormBtn.addEventListener("click", async () => {
+        if (cart.length === 0) {
+            showNotification("ตะกร้าสินค้าของคุณยังว่างเปล่า! กรุณาเพิ่มสินค้าแล้วลองใหม่อีกครั้ง", true);
+            return;
         }
 
-        // เรียกใช้งาน renderCart ที่ฟังก์ชันตัวใหม่ตอนโหลดหน้า
-        renderCart();
+        // แสดง Loading State และปิดการใช้งานปุ่ม
+        openPaymentFormBtn.textContent = 'กำลังสร้างคำสั่งซื้อ...';
+        openPaymentFormBtn.disabled = true;
+        openPaymentFormBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-    </script>
+        try {
+            // ส่งข้อมูลตะกร้าไปที่ Back-end เพื่อสร้างคำสั่งซื้อและล็อกราคา
+            const response = await fetch('http://localhost:3000/api/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cart: cart }) // ส่ง array cart ไปยัง server
+            });
+
+            const data = await response.json(); // แปลง response เป็น JSON
+
+            if (data.success) {
+                // ได้รับ Order ID และราคารวมที่ล็อกไว้จาก Server แล้ว
+                const orderIdInput = document.getElementById("orderId");
+                orderIdInput.value = data.orderId; // ใช้ Order ID ที่ Server สร้างให้
+
+                // แสดงราคารวมที่ล็อกไว้ใน Modal
+                if (lockedTotalAmountElement) {
+                    lockedTotalAmountElement.textContent = `ยอดที่ต้องชำระ: ฿${data.totalAmount}`;
+                }
+
+                // เก็บ Order ID ล่าสุดไว้ใน localStorage เพื่อใช้ในหน้า receipt.html (หลังจากชำระเงินสำเร็จ)
+                // เราจะเก็บเมื่อมีการ submit slip สำเร็จเท่านั้น เพื่อให้แน่ใจว่าเป็น Order ที่จะแสดงในใบเสร็จ
+                
+                paymentFormModal.classList.add("show"); // แสดง Modal
+            } else {
+                showNotification(`เกิดข้อผิดพลาดในการสร้างคำสั่งซื้อ: ${data.message}`, true);
+                console.error('Checkout failed:', data.message);
+            }
+        } catch (error) {
+            console.error('Error during checkout:', error);
+            showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง', true);
+        } finally {
+            // คืนค่าปุ่ม
+            openPaymentFormBtn.textContent = '📤 แจ้งชำระเงินและแนบสลิป';
+            openPaymentFormBtn.disabled = false;
+            openPaymentFormBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    // ปิด Modal เมื่อคลิกปุ่มปิด
+    closePaymentFormBtn.addEventListener("click", () => {
+        paymentFormModal.classList.remove("show");
+        paymentForm.reset(); // ล้างฟอร์ม
+    });
+
+    // ปิด Modal เมื่อคลิกที่ Backdrop (พื้นที่นอกฟอร์ม)
+    document.getElementById("modalBackdrop").addEventListener("click", () => {
+        paymentFormModal.classList.remove("show");
+        paymentForm.reset(); // ล้างฟอร์ม
+    });
+
+    // ส่งฟอร์มแจ้งชำระเงิน
+    paymentForm.addEventListener("submit", async (e) => {
+        e.preventDefault(); // ป้องกันการ reload หน้า
+
+        const orderId = document.getElementById("orderId").value;
+        const customerName = document.getElementById("customerName").value;
+        const paymentSlipInput = document.getElementById("paymentSlip");
+        
+        if (paymentSlipInput.files.length === 0) {
+            showNotification("กรุณาแนบสลิปการชำระเงินด้วยครับ", true);
+            return;
+        }
+
+        const file = paymentSlipInput.files[0];
+
+        // สร้าง FormData object เพื่อส่งไฟล์และข้อมูลอื่น ๆ ไปยัง Server
+        const formData = new FormData();
+        formData.append('orderId', orderId);
+        formData.append('customerName', customerName);
+        formData.append('paymentSlip', file); // 'paymentSlip' ต้องตรงกับชื่อ field ใน multer.single() ของ server
+
+        // Disable ปุ่มและแสดงสถานะ
+        const submitBtn = paymentForm.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'กำลังส่งข้อมูล...';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        try {
+            // ส่งข้อมูลแจ้งชำระเงินและสลิปไปที่ Back-end
+            const response = await fetch('http://localhost:3000/api/payment-slip', {
+                method: 'POST',
+                body: formData // เมื่อใช้ FormData, ไม่ต้องใส่ 'Content-Type' header, browser จะจัดการให้เอง
+            });
+
+            const data = await response.json(); // แปลง response เป็น JSON
+
+            if (data.success) {
+                showNotification("แจ้งชำระเงินสำเร็จ ขอบคุณครับ!", false);
+                paymentFormModal.classList.remove("show");
+                paymentForm.reset(); // ล้างฟอร์ม
+                
+                localStorage.removeItem("cart"); // ล้างตะกร้าหลังจากแจ้งชำระเงินสำเร็จ
+                renderCart(); // อัปเดตหน้าตะกร้าให้ว่างเปล่า
+                
+                // เก็บ Order ID ที่เพิ่งแจ้งชำระเงินสำเร็จ เพื่อนำไปแสดงในหน้า receipt.html
+                localStorage.setItem("lastConfirmedOrderID", orderId); 
+
+                // ไปหน้าใบเสร็จ
+                window.location.href = "receipt.html";
+            } else {
+                showNotification(`เกิดข้อผิดพลาดในการแจ้งชำระเงิน: ${data.message}`, true);
+                console.error('Payment slip submission failed:', data.message);
+            }
+        } catch (error) {
+            console.error('Error submitting payment slip:', error);
+            showNotification('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง', true);
+        } finally {
+            // คืนค่าปุ่ม
+            submitBtn.textContent = 'ส่งข้อมูลแจ้งชำระเงิน';
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    // โหลดตะกร้าสินค้าเมื่อหน้าโหลดเสร็จ
+    document.addEventListener("DOMContentLoaded", () => {
+        renderCart();
+    });
+</script>
+
 </body>
 </html>
