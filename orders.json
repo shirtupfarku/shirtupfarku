@@ -1,0 +1,19 @@
+[
+  {
+    "orderId": "ORDER-1753166026556-127",
+    "items": [
+      {
+        "id": "item-1",
+        "name": "เสื้อยืดลายนกอินทรี (สีดำ)",
+        "price": 299,
+        "quantity": 1,
+        "subtotal": 299
+      }
+    ],
+    "totalAmount": 299,
+    "orderDate": "2025-07-22T06:33:46.556Z",
+    "status": "pending",
+    "customerName": null,
+    "paymentSlip": null
+  }
+]

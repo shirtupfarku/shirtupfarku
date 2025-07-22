@@ -1,0 +1,11 @@
+[
+  { "id": "item-1", "name": "เสื้อยืดลายนกอินทรี (สีดำ)", "price": 299 },
+  { "id": "item-2", "name": "เสื้อยืดลายนกอินทรี (สีขาว)", "price": 299 },
+  { "id": "item-3", "name": "เสื้อคอกลม Basic", "price": 299 },
+  { "id": "item-4", "name": "เสื้อคอกลม Basic (เทา)", "price": 299 },
+  { "id": "item-5", "name": "เสื้อคอกลม Basic (แดง)", "price": 299 },
+  { "id": "item-6", "name": "เสื้อคอกลม Basic (ฟ้า)", "price": 299 },
+  { "id": "item-7", "name": "เสื้อคอกลม Basic (เขียว)", "price": 299 },
+  { "id": "item-8", "name": "เสื้อคอกลม Basic (ส้ม)", "price": 299 },
+  { "id": "item-9", "name": "เสื้อคอกลม Basic (เทาอ่อน)", "price": 299 }
+]
