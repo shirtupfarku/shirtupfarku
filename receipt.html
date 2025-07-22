@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ใบเสร็จแจ้งชำระเงิน - $hirtUpFarkU</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Anuphan', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .receipt-container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* ปรับ shadow ให้ดูทันสมัยขึ้น */
+        }
+        h1 {
+            text-align: center;
+            color: #6b46c1; /* สีม่วง */
+            font-size: 2.5rem; /* ทำให้ใหญ่ขึ้น */
+            margin-bottom: 25px;
+        }
+        .label {
+            font-weight: 600;
+            margin-top: 15px;
+            display: inline-block;
+            color: #4a5568; /* สีเทาเข้ม */
+        }
+        .info-value {
+            font-weight: 400;
+            color: #2d3748; /* สีเทาเข้มกว่า */
+        }
+        img.slip-img {
+            max-width: 100%;
+            height: auto; /* ให้ภาพปรับตามสัดส่วน */
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* เพิ่มเงาเล็กน้อย */
+            display: block; /* ให้รูปอยู่บรรทัดใหม่ */
+        }
+        .button-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+        button {
+            background-color: #6b46c1; /* สีม่วง */
+            color: white;
+            border: none;
+            padding: 12px 25px; /* เพิ่มขนาดปุ่ม */
+            border-radius: 8px; /* ปรับมุมมน */
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #553c9a; /* สีม่วงเข้มขึ้นเมื่อ hover */
+        }
+        .loading-message, .error-message {
+            text-align: center;
+            padding: 20px;
+            color: #6b46c1;
+            font-size: 1.1rem;
+        }
+        .error-message {
+            color: #e53e3e; /* สีแดงสำหรับ error */
+        }
+        .item-list {
+            list-style: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .item-list li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <h1>ใบเสร็จแจ้งชำระเงิน</h1>
+
+        <div id="receipt-details">
+            <div><span class="label">รหัสคำสั่งซื้อ:</span> <span id="orderId" class="info-value"></span></div>
+            <div><span class="label">ชื่อผู้ชำระเงิน:</span> <span id="customerName" class="info-value"></span></div>
+            <div><span class="label">วันที่แจ้งชำระ:</span> <span id="paymentDate" class="info-value"></span></div>
+            <div><span class="label">ยอดชำระ:</span> <span id="totalAmount" class="info-value font-bold text-lg text-purple-700"></span></div>
+
+            <h2 class="label mt-6 text-xl">รายการสินค้า:</h2>
+            <ul id="itemList" class="item-list">
+                </ul>
+
+            <div class="label">สลิปการชำระเงิน:</div>
+            <img id="slipImage" class="slip-img" alt="สลิปการชำระเงิน" />
+            <p id="noSlipMessage" class="error-message hidden">ไม่พบสลิปการชำระเงินสำหรับคำสั่งซื้อนี้</p>
+        </div>
+
+        <p id="loadingMessage" class="loading-message">กำลังโหลดข้อมูลใบเสร็จ...</p>
+        <p id="errorMessage" class="error-message hidden">ไม่พบข้อมูลใบเสร็จ หรือเกิดข้อผิดพลาดในการโหลด</p>
+
+        <div class="button-container">
+            <button onclick="window.location.href='index.html'">กลับสู่หน้าหลัก</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const orderIdElement = document.getElementById("orderId");
+            const customerNameElement = document.getElementById("customerName");
+            const paymentDateElement = document.getElementById("paymentDate");
+            const totalAmountElement = document.getElementById("totalAmount");
+            const itemListElement = document.getElementById("itemList");
+            const slipImageElement = document.getElementById("slipImage");
+            const noSlipMessageElement = document.getElementById("noSlipMessage");
+
+            const loadingMessage = document.getElementById("loadingMessage");
+            const errorMessage = document.getElementById("errorMessage");
+            const receiptDetails = document.getElementById("receipt-details");
+
+            // ซ่อนส่วนแสดงผลและแสดงข้อความโหลด
+            receiptDetails.style.display = 'none';
+            loadingMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+
+            // ดึง Order ID ที่บันทึกไว้ใน localStorage จากหน้า cart.html
+            const lastConfirmedOrderID = localStorage.getItem("lastConfirmedOrderID");
+
+            if (!lastConfirmedOrderID) {
+                loadingMessage.style.display = 'none';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = "ไม่พบรหัสคำสั่งซื้อ กรุณาแจ้งชำระเงินจากหน้าตะกร้าสินค้าก่อน";
+                // setTimeout(() => {
+                //     window.location.href = "cart.html"; // อาจจะ redirect กลับไปหน้าตะกร้า
+                // }, 3000); 
+                return;
+            }
+
+            try {
+                // เรียก API จาก Back-end Server เพื่อดึงข้อมูล Order
+                const response = await fetch(`http://localhost:3000/api/order/${lastConfirmedOrderID}`);
+                const data = await response.json();
+
+                if (data.success && data.order) {
+                    const order = data.order;
+
+                    orderIdElement.textContent = order.orderId;
+                    customerNameElement.textContent = order.customerName || "-";
+                    paymentDateElement.textContent = order.paymentSubmittedAt ? new Date(order.paymentSubmittedAt).toLocaleString("th-TH") : "-";
+                    totalAmountElement.textContent = `฿${parseFloat(order.totalAmount).toFixed(2)}`;
+
+                    // แสดงรายการสินค้า
+                    itemListElement.innerHTML = ''; // Clear previous items
+                    if (order.items && Array.isArray(order.items) && order.items.length > 0) {
+                        order.items.forEach(item => {
+                            const li = document.createElement("li");
+                            li.textContent = `${item.name} x ${item.quantity} = ฿${parseFloat(item.itemTotal).toFixed(2)}`;
+                            itemListElement.appendChild(li);
+                        });
+                    } else {
+                        const li = document.createElement("li");
+                        li.textContent = "ไม่มีรายการสินค้าในคำสั่งซื้อนี้";
+                        itemListElement.appendChild(li);
+                    }
+
+                    // แสดงสลิป
+                    if (order.paymentSlipUrl) {
+                        slipImageElement.src = `http://localhost:3000${order.paymentSlipUrl}`;
+                        slipImageElement.style.display = 'block';
+                        noSlipMessageElement.style.display = 'none';
+                    } else {
+                        slipImageElement.style.display = 'none';
+                        noSlipMessageElement.style.display = 'block';
+                    }
+
+                    loadingMessage.style.display = 'none';
+                    receiptDetails.style.display = 'block'; // แสดงข้อมูลเมื่อโหลดเสร็จ
+                    localStorage.removeItem("lastConfirmedOrderID"); // ลบ Order ID ออกจาก localStorage หลังจากแสดงแล้ว (Optional: ขึ้นอยู่กับ flow ที่ต้องการ)
+                } else {
+                    loadingMessage.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = data.message || "ไม่พบข้อมูลใบเสร็จสำหรับรหัสคำสั่งซื้อนี้";
+                    console.error('Failed to fetch order:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching receipt data:', error);
+                loadingMessage.style.display = 'none';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง";
+            }
+        });
+    </script>
+</body>
+</html>
