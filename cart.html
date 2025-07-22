@@ -418,7 +418,7 @@
 
         try {
             // ส่งข้อมูลตะกร้าไปที่ Back-end เพื่อสร้างคำสั่งซื้อและล็อกราคา
-            const response = await fetch('http://localhost:3000/api/checkout', {
+            const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -498,7 +498,7 @@
 
         try {
             // ส่งข้อมูลแจ้งชำระเงินและสลิปไปที่ Back-end
-            const response = await fetch('http://localhost:3000/api/payment-slip', {
+            const response = await fetch('/api/payment-slip', {
                 method: 'POST',
                 body: formData // เมื่อใช้ FormData, ไม่ต้องใส่ 'Content-Type' header, browser จะจัดการให้เอง
             });
